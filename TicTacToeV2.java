@@ -2,7 +2,9 @@
 This Tic Tac Toe game is created to update and improve Tic Tac Toe Version1 created by Richy Eduardo Castro.
 Tic Tac Toe Version1 was created when Richy was in his early time of programming. Now, Richy has obtained an Associate
 Of Science Degree in Computer Science and wishes to improve upon his first version by applying his newly practiced
-skills of conventional programming practices. Thanks for Playing!
+skills of conventional programming practices. Thanks for Playing
+
+Comments reference lower programming statements
 */
 
 package TicTacToe;
@@ -26,54 +28,64 @@ import javafx.scene.text.FontWeight;
 
 public class TicTacToeV2 extends Application{
     
-    //player objects keep track of player progress throughout the game
+    //player object keep track of player progress throughout the game
     Player player1= new Player("Player One");
-    //
+    //winningAnimation is object which will project the winning animation
+    //as of right not, it will only print a string
+    //subject to update to an animation across the screen
     EndGameAnimation winningAnimation= new EndGameAnimation();
-    
+    //player object keeps track of player progress throughout the game
     Player player2= new Player("Player Two");
     //boolean variables that tells whether the game is running, which player's turn it is, and if there is a winner
     boolean gameON= false, player1ON= true, player2ON= false, winnerWasFound= false;
     //string to represent players symbol 
     String o = "O";
-          
+    //string to represent players symbol      
     String x = "X";
 
 
     public static void main(String[] args){
-
+        //launches javafx application
         Application.launch(args);
     }
 
     @Override
     public void start(Stage primaryStage){
-        
+      //stage created for menu pane which will have quit button and
+      //displayer which player's turn the game is currently on.
       Stage menuStage= new Stage();
-        
+      /*
+      introStage is the stage for the pane which will give the player
+      an option to choose which symbol they desire to use throughout
+      gameplay. Name "intro" stage because it is the initial stage
+      which will appear before menu and tic tac toe board appears.
+      */
       Stage introStage= new Stage();
-        
+      //IntroWinder object  
       IntroWindow introScreen= new IntroWindow();
-      
+      //position button on introwindow
       introScreen.chooseMark.setAlignment(Pos.BOTTOM_CENTER);
-    
+      //sets spacing for the introwindow buttons
       introScreen.chooseMark.setSpacing(5);
-      
+      //scene for intro window
       Scene introScene= new Scene(introScreen.thisFlowPane, 300, 150);
-      
+      //sets title for introwindow
       introStage.setTitle("Tic Tac Toe");
-      
+      //sets scene for introwindow
       introStage.setScene(introScene);
-      
+      //sets title for primary tic tac toe window
       primaryStage.setTitle("Tic Tac Toe");
-      
+      //Disable window resizing
+      primaryStage.setResizable(false);
+      //sets width of the button to choose the "x" symbol in the intro window
       introScreen.xButton.setPrefWidth(100);
-      
+      //sets the action event for a player clicking the "x" button
       introScreen.xButton.setOnAction(e -> {
-          
+          //uses player classes set mark method to set player's symbol
           player2.setMark(x);
           
           player1.setMark(o);
-          
+          //uses boolean variables to start the game
           player1ON= true;
           
           gameON= true;
@@ -83,15 +95,15 @@ public class TicTacToeV2 extends Application{
           menuStage.show();
           
       });
-      
+      //sets the width of the "y" button in the intro window
       introScreen.yButton.setPrefWidth(100);
-      
+      //sets the action event of clicking the "Y" button
       introScreen.yButton.setOnAction(e2 -> {
-          
+          //uses player classes set mark method to set player's symbol
           player2.setMark(o);
           
           player1.setMark(x);
-          
+          //uses boolean variables to start the game
           player1ON= true;
           
           gameON= true;
@@ -101,19 +113,19 @@ public class TicTacToeV2 extends Application{
           menuStage.show();
           
       });
-      
+      //sets title for menu stage
       menuStage.setTitle("Game Status");
-      
+      //constructs menuWindow object which will be the menu window for the game
       MenuWindow menuBox= new MenuWindow();
       
       menuBox.menuVbox.setSpacing(10);
-      
+      //sets the action event for the quit button in the menu window
       menuBox.quitButton.setOnAction(e10 ->{
           
           System.exit(0);
           
       });
-      
+      //pane for menuWindow
       FlowPane menuPane= new FlowPane(menuBox.menuVbox);
       
       menuPane.setAlignment(Pos.CENTER);
@@ -121,16 +133,21 @@ public class TicTacToeV2 extends Application{
       Scene menuWindowScene= new Scene(menuPane, 300 , 150);
       
       menuStage.setScene(menuWindowScene);
-        
+        //constructs TicTacToeBoard object
         TicTacToeBoard GameBoard = new TicTacToeBoard();
+        //sets main scene to the gameboard
         Scene scene= new Scene(GameBoard.GameBoardPane, 750, 600);
-        primaryStage.setScene(scene);
         
+        primaryStage.setScene(scene);
+        //sets title for primary stage
         primaryStage.setTitle("Tic Tac Toe V2");
-     
+        /*
+        The following statements set the actions events that will occur once 
+        a player clicks on a board space (or Rectangle object in Java terms)
+        */
         GameBoard.rec1.setOnMouseClicked(e -> {
           
-          if(player1.ifWins.rec1Marked== false && player2.ifWins.rec1Marked== false)
+          if(player1.rec1Marked== false && player2.rec1Marked== false)
           {
           GameBoard.rec1.toBack();
           
@@ -138,19 +155,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec1));
           
-              player1.ifWins.rec1Marked = true;
+              player1.rec1Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
+                  player1.searchForWin();
                   
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -169,19 +184,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec1));
               
-              player2.ifWins.rec1Marked= true;
+              player2.rec1Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
+                  player2.searchForWin();
                   
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  if(player2.winner){
           
           GameBoard.GameBoardPane.getChildren().clear();
                       
@@ -203,7 +216,7 @@ public class TicTacToeV2 extends Application{
       
       GameBoard.rec2.setOnMouseClicked(e2 ->{
           
-          if(player1.ifWins.rec2Marked== false && player2.ifWins.rec2Marked== false)
+          if(player1.rec2Marked== false && player2.rec2Marked== false)
           {
           
           GameBoard.rec2.toBack();
@@ -212,19 +225,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec2));
           
-              player1.ifWins.rec2Marked = true;
+              player1.rec2Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
+                  player1.searchForWin();
                   
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -242,19 +253,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec2));
               
-              player2.ifWins.rec2Marked= true;
+              player2.rec2Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
+                  player2.searchForWin();
                   
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  if(player2.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -275,7 +284,7 @@ public class TicTacToeV2 extends Application{
       
       GameBoard.rec3.setOnMouseClicked(e3 -> {
           
-          if(player1.ifWins.rec3Marked== false && player2.ifWins.rec3Marked== false)
+          if(player1.rec3Marked== false && player2.rec3Marked== false)
           {
           
           GameBoard.rec3.toBack();
@@ -284,19 +293,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec3));
           
-              player1.ifWins.rec3Marked = true;
+              player1.rec3Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
+                  player1.searchForWin();
                   
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -315,19 +322,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec3));
               
-              player2.ifWins.rec3Marked= true;
+              player2.rec3Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
-                  
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player2.searchForWin();
+
+                  if(player2.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -349,7 +354,7 @@ public class TicTacToeV2 extends Application{
       });
       
       GameBoard.rec4.setOnMouseClicked(e4 -> {
-          if(player1.ifWins.rec4Marked== false && player2.ifWins.rec4Marked== false)
+          if(player1.rec4Marked== false && player2.rec4Marked== false)
           {
           
           GameBoard.rec4.toBack();
@@ -358,19 +363,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec4));
           
-              player1.ifWins.rec4Marked = true;
+              player1.rec4Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
-                  
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player1.searchForWin();
+
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -389,19 +392,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec4));
               
-              player2.ifWins.rec4Marked= true;
+              player2.rec4Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
-                  
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player2.searchForWin();
+
+                  if(player2.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -423,7 +424,7 @@ public class TicTacToeV2 extends Application{
       
       GameBoard.rec5.setOnMouseClicked(e5 -> {
           
-          if(player1.ifWins.rec5Marked== false && player2.ifWins.rec5Marked== false)
+          if(player1.rec5Marked== false && player2.rec5Marked== false)
           {
           GameBoard.rec5.toBack();
           
@@ -431,19 +432,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec5));
           
-              player1.ifWins.rec5Marked = true;
+              player1.rec5Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
+                  player1.searchForWin();
                   
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -462,19 +461,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec5));
               
-              player2.ifWins.rec5Marked= true;
+              player2.rec5Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
-                  
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player2.searchForWin();
+         
+                  if(player2.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -495,7 +492,7 @@ public class TicTacToeV2 extends Application{
       });
       
       GameBoard.rec6.setOnMouseClicked(e6 -> {
-          if(player1.ifWins.rec6Marked== false && player2.ifWins.rec6Marked== false)
+          if(player1.rec6Marked== false && player2.rec6Marked== false)
           {
           GameBoard.rec6.toBack();
           
@@ -503,19 +500,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec6));
           
-              player1.ifWins.rec6Marked = true;
+              player1.rec6Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
-                  
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player1.searchForWin();
+
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -534,19 +529,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec6));
               
-              player2.ifWins.rec6Marked= true;
+              player2.rec6Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
-                  
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player2.searchForWin();
+                 
+                  if(player2.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -567,7 +560,7 @@ public class TicTacToeV2 extends Application{
       });
       
       GameBoard.rec7.setOnMouseClicked(e7 -> {
-          if(player1.ifWins.rec7Marked== false && player2.ifWins.rec7Marked== false)
+          if(player1.rec7Marked== false && player2.rec7Marked== false)
           {
           GameBoard.rec7.toBack();
           
@@ -575,19 +568,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec7));
           
-              player1.ifWins.rec7Marked = true;
+              player1.rec7Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
-                  
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player1.searchForWin();
+
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -605,17 +596,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec7));
               
-              player2.ifWins.rec7Marked= true;
+              player2.rec7Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
+                  player2.searchForWin();
                   
-                  if(winnerWasFound){
+                  if(player2.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -623,11 +614,6 @@ public class TicTacToeV2 extends Application{
           
       }
                   
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  System.out.println(player2.ifWins.canWin);
-                  
-                  System.out.println(player2.ifWins.winner);
           
           }
               
@@ -643,7 +629,7 @@ public class TicTacToeV2 extends Application{
       });
       
       GameBoard.rec8.setOnMouseClicked(e8 -> {
-          if(player1.ifWins.rec8Marked== false && player2.ifWins.rec8Marked== false)
+          if(player1.rec8Marked== false && player2.rec8Marked== false)
           {
           GameBoard.rec8.toBack();
           
@@ -651,19 +637,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec8));
           
-              player1.ifWins.rec8Marked = true;
+              player1.rec8Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
+                  player1.searchForWin();
                   
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -681,19 +665,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec8));
               
-              player2.ifWins.rec8Marked= true;
+              player2.rec8Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
-                  
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player2.searchForWin();
+
+                  if(player2.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -714,7 +696,7 @@ public class TicTacToeV2 extends Application{
       });
       
       GameBoard.rec9.setOnMouseClicked(e9 -> {
-          if(player1.ifWins.rec9Marked== false && player2.ifWins.rec9Marked== false)
+          if(player1.rec9Marked== false && player2.rec9Marked== false)
           {
           GameBoard.rec9.toBack();
           
@@ -722,19 +704,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player1.makeMove(GameBoard.rec9));
           
-              player1.ifWins.rec9Marked = true;
+              player1.rec9Marked = true;
               
-              player1.ifWins.numOfSquares++;
+              player1.numOfSquares++;
               
-              player1.ifWins.canWinCheck();
+              player1.canWinCheck();
               
-              if (player1.ifWins.canWin == true){
+              if (player1.canWin == true){
                   
-                  player1.ifWins.searchForWin();
-                  
-                  winnerWasFound= player1.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player1.searchForWin();
+
+                  if(player1.winner){
                       
           GameBoard.GameBoardPane.getChildren().clear();
           
@@ -753,19 +733,17 @@ public class TicTacToeV2 extends Application{
               
               GameBoard.GameBoardPane.getChildren().add(player2.makeMove(GameBoard.rec9));
               
-              player2.ifWins.rec9Marked= true;
+              player2.rec9Marked= true;
               
-              player2.ifWins.numOfSquares++;
+              player2.numOfSquares++;
           
-              player2.ifWins.canWinCheck();
+              player2.canWinCheck();
               
-              if (player2.ifWins.canWin == true){
+              if (player2.canWin == true){
                   
-                  player2.ifWins.searchForWin();
-                  
-                  winnerWasFound= player2.ifWins.winner;
-                  
-                  if(winnerWasFound){
+                  player2.searchForWin();
+
+                  if(player2.winner){
           
           GameBoard.GameBoardPane.getChildren().clear();
                       
